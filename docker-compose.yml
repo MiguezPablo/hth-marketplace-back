@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:15
+    container_name: hth-marketplace-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: marketplace
+      POSTGRES_USER: marketplace
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:?set SPRING_DATASOURCE_PASSWORD in .env}
+      TZ: America/Argentina/Buenos_Aires
+    volumes:
+      - marketplace_db_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:${MARKETPLACE_DB_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marketplace -d marketplace"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  back:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hth-marketplace-back
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:${MARKETPLACE_BACK_PORT:-8082}:8080"
+    networks:
+      - default
+      - hth_default
+
+volumes:
+  marketplace_db_data:
+
+networks:
+  hth_default:
+    external: true

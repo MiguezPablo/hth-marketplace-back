@@ -1,0 +1,12 @@
+.git
+.github
+.gradle
+build
+bin
+.classpath
+.factorypath
+.project
+.settings
+*.iml
+out
+node_modules
