@@ -46,13 +46,6 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/miguezpablo/hth-marketplace-back:latest
-      - name: Make package public
-        run: |
-          curl -fsS -X PATCH \
-            -H "Authorization: Bearer ${{ github.token }}" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/user/packages/container/hth-marketplace-back/visibility \
-            -d '{"visibility":"public"}'
 
   deploy:
     needs: build-and-push
