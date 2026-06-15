@@ -31,6 +31,7 @@ jobs:
     timeout-minutes: 20
     permissions:
       packages: write
+      contents: read
     steps:
       - uses: actions/checkout@v6
       - name: Login to GHCR
