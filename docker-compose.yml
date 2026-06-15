@@ -19,9 +19,7 @@ services:
       retries: 10
 
   back:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/miguezpablo/hth-marketplace-back:latest
     container_name: hth-marketplace-back
     restart: unless-stopped
     depends_on:

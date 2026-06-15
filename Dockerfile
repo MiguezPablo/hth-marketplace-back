@@ -11,18 +11,15 @@ COPY src src
 
 RUN gradle build -x test --no-daemon
 
-FROM eclipse-temurin:21-jdk-jammy
+FROM eclipse-temurin:21-jre-alpine
 
 ENV TZ=America/Argentina/Buenos_Aires
 
-RUN apt-get update && \
-    apt-get install -y tzdata curl && \
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    groupadd -r appuser && \
-    useradd -r -g appuser appuser
+RUN apk add --no-cache tzdata curl && \
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo "$TZ" > /etc/timezone && \
+    addgroup -S appuser && \
+    adduser -S appuser -G appuser
 
 WORKDIR /app
 
